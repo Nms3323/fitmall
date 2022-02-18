@@ -24,7 +24,6 @@ class CityController extends Controller
     {
         $data['title'] = 'City';
         $data['data'] = City::join('state','state.id','city.state_id')->join('country','country.id','city.country_id')->select('city.*','state.state_name','country.country_name')->get();
-        $data['state'] = State::get();
         $data['country'] = Country::get();
         return view('city.index')->with($data);
     }
@@ -80,8 +79,13 @@ class CityController extends Controller
      */
     public function edit($id)
     {
-        $data['title'] = "City";
-        $data['city_data'] = City::where('id',$request->get('id'))->first();
+        $data['city_data'] = City::where('id',$id)->first();
+        $state_data = State::where('country_id',$data['city_data']['country_id'])->get();
+        $data['html'] = "<option value=''>--Select State--</option>";
+        foreach ($state_data as $state_dt) {
+            $data['html'] .= "<option value='".$state_dt['id']."'>".$state_dt['state_name']."</option>";
+        }
+        
         return response()->json($data);
     }
 
@@ -94,14 +98,20 @@ class CityController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $update = City::where('id',$request->country_hidden_id)->update($param);
+        $param = $request->all();
+
+        unset($param['_token'],$param['city_hidden_id'],$param['_method']);
+        $update = City::where('id',$request->city_hidden_id)->update($param);
+        
         if($update)
         {
-            return response()->json(['status' => 'success']);
+            toastr()->success('Successfully City Updated');
+            return redirect()->back();
         }
         else
         {
-            return response()->json(['status' => 'error']);
+            toastr()->error('Something Want Wrong..!');
+            return redirect()->back();
         }
     }
 
@@ -149,12 +159,12 @@ class CityController extends Controller
 
     public function statusChange(Request $request)
     {
-        $subServices = City::where('id',$request->get('id'))->value('active');
-        if($subServices == 1)
+        $city = City::where('id',$request->get('id'))->value('active');
+        if($city == 1)
         {
             $update = City::where('id',$request->get('id'))->update(['active' => 0]);
         }
-        if($subServices == 0)
+        if($city == 0)
         {
             $update = City::where('id',$request->get('id'))->update(['active' => 1]);
         }

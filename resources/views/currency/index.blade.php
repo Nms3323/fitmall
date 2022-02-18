@@ -10,7 +10,7 @@
 			<!--begin::Page title-->
 			<div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
 				<!--begin::Title-->
-				<h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">City Details</h1>
+				<h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">Currency Details</h1>
 				<!--end::Title-->
 				<!--begin::Separator-->
 				<span class="h-20px border-gray-200 border-start mx-4"></span>
@@ -28,7 +28,7 @@
 					</li>
 					<!--end::Item-->
 					<!--begin::Item-->
-					<li class="breadcrumb-item text-muted">City Details</li>
+					<li class="breadcrumb-item text-muted">Currency Details</li>
 					<!--end::Item-->
 				</ul>
 				<!--end::Breadcrumb-->
@@ -40,7 +40,7 @@
 
 				<!--end::Wrapper-->
 				<!--begin::Button-->
-				<a href="#" class="btn btn-sm btn-primary" id="kt_toolbar_primary_button" data-bs-toggle="modal" data-bs-target="#create_city">Create</a>
+				<a href="#" class="btn btn-sm btn-primary" id="kt_toolbar_primary_button" data-bs-toggle="modal" data-bs-target="#create_currency">Create</a>
 				<!--end::Button-->
 			</div>
 			<!--end::Actions-->
@@ -65,9 +65,9 @@
 								<!--begin::Table row-->
 								<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
 									<th style="width: 50px">No.</th>
-									<th>Country Name</th>
-									<th>State Name</th>
-									<th>City Name</th>
+									<th>Currency Name</th>
+									<th>Currency Code</th>
+									<th>Currency Symbol</th>
 									<th>Activate Status</th>
 									<th style="width: 150px">Actions</th>
 								</tr>
@@ -81,20 +81,20 @@
 								@foreach($data as $dt)
 								<tr>
 									<td>{{ $count++ }}</td>
-									<td>{{ ucfirst($dt->country_name) }}</td>
-									<td>{{ ucfirst($dt->state_name) }}</td>
-									<td>{{ ucfirst($dt->city_name) }}</td>
+									<td>{{ ucfirst($dt->currency_name) }}</td>
+									<td>{{ $dt->code }}</td>
+									<td>{{ $dt->symbol }}</td>
 									<td>
 										<label class="form-check form-switch form-switch-sm form-check-custom form-check-solid flex-stack">
 											<input class="form-check-input" type="checkbox" value="1" @if($dt->active == 1) checked @endif onchange="status('{{ $dt->id }}')" name=""/>
 										</label>
 									</td>
 									<td>
-										<a class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Edit" data-bs-toggle="modal" data-bs-target="#edit_city" onclick="edit('{{ $dt->id }}')" style="background: #968cbd;">
+										<a class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Edit" data-bs-toggle="modal" data-bs-target="#edit_currency" onclick="edit('{{ $dt->id }}')" style="background: #968cbd;">
 											<i class="la la-edit" style="color: white !important;"></i>
 										</a>
-										<input type="hidden" value="{{ $dt->id }}" name="delete_city_id" id="delete_city_id">
-										<button class="btn btn-sm btn-clean btn-icon btn-icon-md" id="delete_city" style="background-color: red;" data-toggle="tooltip" title="Delete">
+										<input type="hidden" value="{{ $dt->id }}" name="delete_currency_id" id="delete_currency_id">
+										<button class="btn btn-sm btn-clean btn-icon btn-icon-md" id="delete_currency" style="background-color: red;" data-toggle="tooltip" title="Delete">
 											<i class="la la-trash" style="color: #ffffff"></i>
 										</button>
 									</td>
@@ -118,18 +118,18 @@
 <!--end::Content-->
 
 <!--begin::Modal - New Address-->
-<div class="modal fade" id="create_city" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="create_currency" tabindex="-1" aria-hidden="true">
 	<!--begin::Modal dialog-->
 	<div class="modal-dialog modal-dialog-centered mw-650px">
 		<!--begin::Modal content-->
 		<div class="modal-content">
 			<!--begin::Form-->
-			<form class="form add__form" action="{{ route('city.store') }}" method="post" id="kt_modal_new_address_form">
+			<form class="form add__form" action="{{ route('currency.store') }}" method="post" id="kt_modal_new_address_form">
 				@csrf
 				<!--begin::Modal header-->
 				<div class="modal-header" id="kt_modal_new_address_header">
 					<!--begin::Modal title-->
-					<h2>Add City</h2>
+					<h2>Add Currency</h2>
 					<!--end::Modal title-->
 					<!--begin::Close-->
 					<div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -155,35 +155,30 @@
 						<!--begin::Input group-->
 						<div class="d-flex flex-column mb-5 fv-row">
 							<!--begin::Label-->
-							<label class="required fs-5 fw-bold mb-2">Country</label>
+							<label class="required fs-5 fw-bold mb-2">Currency Name</label>
 							<!--end::Label-->
 							<!--begin::Input-->
-							<select name="country_id" class="form-control form-control-solid" id="country_id">
-								<option value="">--Select Country--</option>
-								@if(!empty($country))
-								@foreach($country as $country_dt)
-								<option value="{{ $country_dt->id }}">{{ $country_dt->country_name }}</option>
-								@endforeach
-								@endif
-							</select>
+							<input class="form-control form-control-solid" placeholder="Enter Currency Name" name="currency_name" id="currency_name" required="required" />
 							<!--end::Input-->
 						</div>
+						<!--end::Input group-->
+						<!--begin::Input group-->
 						<div class="d-flex flex-column mb-5 fv-row">
 							<!--begin::Label-->
-							<label class="required fs-5 fw-bold mb-2">State</label>
+							<label class="required fs-5 fw-bold mb-2">Currency Code</label>
 							<!--end::Label-->
 							<!--begin::Input-->
-							<select name="state_id" class="form-control form-control-solid" id="state_id">
-								<option value="">--Select State--</option>
-							</select>
+							<input class="form-control form-control-solid" placeholder="Enter Currency Code" name="code" id="code" required="required" />
 							<!--end::Input-->
 						</div>
+						<!--end::Input group-->
+						<!--begin::Input group-->
 						<div class="d-flex flex-column mb-5 fv-row">
 							<!--begin::Label-->
-							<label class="required fs-5 fw-bold mb-2">City</label>
+							<label class="required fs-5 fw-bold mb-2">Currency symbol</label>
 							<!--end::Label-->
 							<!--begin::Input-->
-							<input class="form-control form-control-solid" placeholder="Enter City Name" name="city_name" id="city_name" required="required" />
+							<input class="form-control form-control-solid" placeholder="Enter Currency Symbol" name="symbol" id="symbol" required="required" />
 							<!--end::Input-->
 						</div>
 						<!--end::Input group-->
@@ -215,7 +210,7 @@
 <!--end::Modal - New Address-->
 
 <!--begin::Modal - New Address-->
-<div class="modal fade" id="edit_city" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="edit_currency" tabindex="-1" aria-hidden="true">
 	<!--begin::Modal dialog-->
 	<div class="modal-dialog modal-dialog-centered mw-650px">
 		<!--begin::Modal content-->
@@ -227,7 +222,7 @@
 				<!--begin::Modal header-->
 				<div class="modal-header" id="kt_modal_new_address_header">
 					<!--begin::Modal title-->
-					<h2>Edit State</h2>
+					<h2>Edit Currency</h2>
 					<!--end::Modal title-->
 					<!--begin::Close-->
 					<div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -249,40 +244,35 @@
 				<div class="modal-body py-10 px-lg-17">
 					<!--begin::Scroll-->
 					<div class="scroll-y me-n7 pe-7" id="kt_modal_new_address_scroll" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_new_address_header" data-kt-scroll-wrappers="#kt_modal_new_address_scroll" data-kt-scroll-offset="300px">
-						<input type="hidden" name="city_hidden_id" value="" id="hidden_id">
+						<input type="hidden" name="currency_hidden_id" value="" id="hidden_id">
 						
 						<!--begin::Input group-->
 						<div class="d-flex flex-column mb-5 fv-row">
 							<!--begin::Label-->
-							<label class="required fs-5 fw-bold mb-2">Country</label>
+							<label class="required fs-5 fw-bold mb-2">Currency Name</label>
 							<!--end::Label-->
 							<!--begin::Input-->
-							<select name="country_id" class="form-control form-control-solid" id="edit_country_id">
-								<option value="">--Select Country--</option>
-								@if(!empty($country))
-								@foreach($country as $country_dt)
-								<option value="{{ $country_dt->id }}">{{ $country_dt->country_name }}</option>
-								@endforeach
-								@endif
-							</select>
+							<input class="form-control form-control-solid" placeholder="Enter Currency Name" name="currency_name" id="edit_currency_name" required="required" />
 							<!--end::Input-->
 						</div>
+						<!--end::Input group-->
+						<!--begin::Input group-->
 						<div class="d-flex flex-column mb-5 fv-row">
 							<!--begin::Label-->
-							<label class="required fs-5 fw-bold mb-2">State</label>
+							<label class="required fs-5 fw-bold mb-2">Currency Code</label>
 							<!--end::Label-->
 							<!--begin::Input-->
-							<select name="state_id" class="form-control form-control-solid" id="edit_state_id">
-								<option value="">--Select State--</option>
-							</select>
+							<input class="form-control form-control-solid" placeholder="Enter Currency Code" name="code" id="edit_code" required="required" />
 							<!--end::Input-->
 						</div>
+						<!--end::Input group-->
+						<!--begin::Input group-->
 						<div class="d-flex flex-column mb-5 fv-row">
 							<!--begin::Label-->
-							<label class="required fs-5 fw-bold mb-2">City Name</label>
+							<label class="required fs-5 fw-bold mb-2">Currency symbol</label>
 							<!--end::Label-->
 							<!--begin::Input-->
-							<input class="form-control form-control-solid" placeholder="Enter City Name" name="city_name" id="edit_city_name" required="required" />
+							<input class="form-control form-control-solid" placeholder="Enter Currency Symbol" name="symbol" id="edit_symbol" required="required" />
 							<!--end::Input-->
 						</div>
 						<!--end::Input group-->
@@ -315,91 +305,49 @@
 @toastr_js
 @toastr_render
 <script type="text/javascript">
-
 	$(document).ready(function() {
 		$('.data-table').DataTable();
-	});
-
-	$('#country_id').on('change', function() {
-		$.ajax({
-			type: "POST",
-			url: "{{ route('get.stateList') }}",
-			data: {
-				'_token': $('input[name="_token"]').val(),
-				'country_id': this.value
-			},
-			cache: false,
-			success: function (data)
-			{
-				$("#state_id").empty();
-				$("#state_id").append(data);
-			}
-		});
-	});
-
-	$('#edit_country_id').on('change', function() {
-		$.ajax({
-			type: "POST",
-			url: "{{ route('get.stateList') }}",
-			data: {
-				'_token': $('input[name="_token"]').val(),
-				'country_id': this.value
-			},
-			cache: false,
-			success: function (data)
-			{
-				$("#edit_state_id").empty();
-				$("#edit_state_id").append(data);
-			}
-		});
 	});
 
 	$(".add__form").validate({
 		rules:
 		{
-			country_id:{required:true},
-			state_id:{required:true},
-			city_name:{
+			currency_name:{required: true},
+			code:{
 				required: true,
 				remote: {
-					url: "{{ route('check.cityName') }}",
+					url: "{{ route('check.currencyName') }}",
 					type: "post",
 					dataType: 'json',
 					data: {
 						'_token': $('input[name="_token"]').val(),
-						country_id: function() {
-							return $( "#country_id").val();
-						},
-						state_id: function() {
-							return $( "#state_id").val();
-						},
-						city_name: function() {
-							return $( "#city_name").val();
+						code: function() {
+							return $( "#code").val();
 						}
 					}
 				}
-			}
+			},
+			symbol:{required: true}
 		},
 		messages:
 		{
-			country_id:{required:"Please Select Country"},
-			state_id:{required:"Please Select state"},
-			city_name:{
-				required:"Please enter city name",
-				remote:"This city is already exist"
-			}
+			currency_name:{required:"Please enter currency name"},
+			code:{
+				required:"Please enter code",
+				remote:"This code is already exist"
+			},
+			symbol:{required:"Please enter symbol"}
 		}
 	});
 
 	$(".edit__form").validate({
 		rules:
 		{
-			country_id:{required:true},
-			state_id:{required:true},
-			city_name:{
+			currency_name:{required: true},
+			code:{
 				required: true,
 				remote: {
-					url: "{{ route('check.cityName') }}",
+					url: "{{ route('check.currencyName') }}",
 					type: "post",
 					dataType: 'json',
 					data: {
@@ -407,32 +355,27 @@
 						id: function() {
 							return $("#hidden_id").val();
 						},
-						country_id: function() {
-							return $("#edit_country_id").val();
-						},
-						state_id: function() {
-							return $( "#edit_state_id").val();
-						},
-						city_name: function() {
-							return $("#edit_city_name").val();
+						name: function() {
+							return $("#edit_code").val();
 						}
 					}
 				}
-			}
+			},
+			symbol:{required: true}
 		},
 		messages:
 		{
-			country_id:{required:"Please Select Country"},
-			state_id:{required:"Please Select state"},
-			city_name:{
-				required:"Please enter city name",
-				remote:"This city is already exist"
-			}
+			currency_name:{required:"Please enter currency name"},
+			services_name:{
+				required:"Please enter code",
+				remote:"This code is already exist"
+			},
+			symbol:{required:"Please enter symbol"}
 		}
 	});
 
 	function edit(id){
-		var edit_url = '{{route("city.edit",":id")}}';
+		var edit_url = '{{route("currency.edit",":id")}}';
 		edit_url = edit_url.replace(':id', id);
 
 		$.ajax({
@@ -445,29 +388,24 @@
 			cache: false,
 			success: function (data)
 			{
-				var update_url = '{{route("city.update",":id")}}';
+				var update_url = '{{route("currency.update",":id")}}';
 				update_url = update_url.replace(':id', id);
 				$(".edit__form").attr('action', update_url);
-
-				$("#edit_state_id").empty();
-				$("#edit_state_id").append(data.html);
-
-				$('#hidden_id').val(data.city_data['id']);
-				$('#edit_country_id').val(data.city_data['country_id']);
-				$('#edit_state_id').val(data.city_data['state_id']);
-				$('#edit_city_name').val(data.city_data['city_name']);
-
+				$('#hidden_id').val(data.currency_data['id']);
+				$('#edit_currency_name').val(data.currency_data['currency_name']);
+				$('#edit_code').val(data.currency_data['code']);
+				$('#edit_symbol').val(data.currency_data['symbol']);
 			}
 		});
 	}
 
 	$(document).ready(function() {
 
-		$(document).on('click', '#delete_city', function ()
+		$(document).on('click', '#delete_currency', function ()
 		{
 			var obj = $(this);
-			var id = $(this).closest('td').find("#delete_city_id").val();
-			var delete_url = "{{route('city.destroy', ':id') }}";
+			var id = $(this).closest('td').find("#delete_currency_id").val();
+			var delete_url = "{{route('currency.destroy', ':id') }}";
 			delete_url = delete_url.replace(':id', id);
 
 			swal({
@@ -500,7 +438,7 @@
 	function status(id) {
 		$.ajax({
 			type:'POST',
-			url:"{{route('city.status')}}",
+			url:"{{route('currency.status')}}",
 			data:{
 				'_token' : $('input[name="_token"]').val(),
 				'id':id
