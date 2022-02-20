@@ -47,9 +47,9 @@ Route::post('check/currencyName','CurrencyController@checkCurrencyName')->name('
 Route::post('status/currency','CurrencyController@statusChange')->name('currency.status');
 
 Route::resource('coinMaster','CoinMasterController');
-Route::post('check/coinMasterName','CoinMasterController@checkCoinMasterName')->name('check.coinMasterName');
+Route::post('check/coinMaster','CoinMasterController@checkCoinMaster')->name('check.coinMaster');
 Route::post('status/coinMaster','CoinMasterController@statusChange')->name('coinMaster.status');
 
 Route::resource('coinVia','CoinviaController');
-Route::post('check/coinViaName','CoinviaController@checkCoinViaName')->name('check.coinViaName');
+Route::post('check/withdraw','CoinviaController@withdrawChange')->name('withdraw.coinVia');
 Route::post('status/coinVia','CoinviaController@statusChange')->name('coinVia.status');
