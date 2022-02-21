@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\User;
+use App\Business;
 
 class AuthController extends Controller
 {
@@ -102,15 +103,14 @@ class AuthController extends Controller
 
 	public function UpdateProfile(Request $request)
 	{ 
-		// $validatedData  = $request->validate([
-		// 	'name' => 'required|string',
-		// 	'date_of_birth' => 'required|string|email|unique:users',
-		// 	'phone_no' => 'required|string|confirmed',
-		// 	'profile' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
-		// 	'old_profile' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
-		// ]);
+		$validatedData  = $request->validate([
+			'name' => 'required|string',
+			'date_of_birth' => 'required|date',
+			'phone_no' => 'required|string',
+			'profile' => 'mimes:jpeg,png,jpg,gif,svg',
+			'old_profile' => 'required|string',
+		]);
 		
-		// dd($validatedData);
 		$param = $request->all();
 
 		if($request->old_profile != null){
@@ -152,4 +152,45 @@ class AuthController extends Controller
 		}
 	}
 	
+	public function businessRegister(Request $request)
+	{
+		$validatedData  = $request->validate([
+			'brand_name' => 'required|string',
+			'legal_name' => 'required|string',
+			'brand_logo' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
+			'incorporation_dt' => 'required|string',
+			'currency_id' => 'required|numeric',
+			'user_id' => 'required|numeric'
+		]);
+		
+		if($validate){
+			return response()->json([
+				'message' => 'Validation Error'
+			], 422);
+		}else{
+
+		}
+
+		$param = $request->all();
+		
+
+		if($request->hasFile('brand_logo'))
+		{
+			$brand_logo_name = time().'-'.$request->brand_logo->getClientOriginalName();
+			request()->brand_logo->move(public_path('/brand_logo/'), $brand_logo_name);
+			$param['brand_logo'] = $brand_logo_name;
+		}
+
+        $create = Business::create($param);
+
+		if($update){
+			return response()->json([
+				'message' => 'Successfully Registerd Business'
+			], 201);
+		}else{
+			return response()->json([
+				'message' => 'Somthing Want Wrong'
+			], 500);
+		}
+	}
 }

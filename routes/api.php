@@ -14,9 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-	return $request->user();
-});
 
 Route::group([
 	'prefix' => 'auth'
@@ -30,6 +27,7 @@ Route::group([
 		Route::get('logout', 'api\AuthController@logout');
 		Route::get('user', 'api\AuthController@user');
 		Route::post('UpdateProfile', 'api\AuthController@UpdateProfile');
+		Route::post('businessRegister', 'api\AuthController@businessRegister');
 		
 		Route::get('country', 'api\LocationController@country');
 		Route::get('state', 'api\LocationController@state');
