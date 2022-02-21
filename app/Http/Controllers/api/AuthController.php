@@ -154,22 +154,21 @@ class AuthController extends Controller
 	
 	public function businessRegister(Request $request)
 	{
-		$validatedData  = $request->validate([
-			'brand_name' => 'required|string',
-			'legal_name' => 'required|string',
-			'brand_logo' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
-			'incorporation_dt' => 'required|string',
-			'currency_id' => 'required|numeric',
-			'user_id' => 'required|numeric'
-		]);
-		
-		if($validate){
-			return response()->json([
-				'message' => 'Validation Error'
-			], 422);
-		}else{
+		// $validatedData  = $request->validate([
+		// 	'brand_name' => 'required|string',
+		// 	'legal_name' => 'required|string',
+		// 	'brand_logo' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
+		// 	'incorporation_dt' => 'required|string',
+		// 	'currency_id' => 'required|numeric',
+		// 	'user_id' => 'required|numeric'
+		// ]);
+		// if($validatedData){
+		// 	return response()->json([
+		// 		'message' => 'Validation Error'
+		// 	], 422);
+		// }else{
 
-		}
+		// }
 
 		$param = $request->all();
 		
@@ -183,7 +182,7 @@ class AuthController extends Controller
 
         $create = Business::create($param);
 
-		if($update){
+		if($create){
 			return response()->json([
 				'message' => 'Successfully Registerd Business'
 			], 201);
